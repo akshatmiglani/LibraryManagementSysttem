@@ -4,26 +4,39 @@ import axios from 'axios';
 const Filter = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [books, setBooks] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
-  const handleCategoryClick = async (category) => {
+  const handleCategoryClick = async (category, page = 1) => {
     setSelectedCategory(category);
+    fetchBooks(category, page);
+  };
+
+  const fetchBooks = async (category, page) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/books?category=${category}`);
-      setBooks(response.data);
+      const response = await axios.get(`http://localhost:4000/api/books?category=${category}&page=${page}&limit=10`);
+      setBooks(response.data.books);
+      setTotalPages(response.data.totalPages);
+      setCurrentPage(response.data.currentPage);
     } catch (error) {
       console.error('Error fetching books:', error);
     }
   };
 
+  const handlePageChange = (page) => {
+    fetchBooks(selectedCategory, page);
+    setCurrentPage(page);
+  };
+
   return (
     <div>
-      <ul>
-        {['fiction', 'juvenile Fiction', 'history', 'science', 'adventure', 'business economics', 'technology & Engineering', 'classics', 'medical'].map(category => (
-          <li key={category} onClick={() => handleCategoryClick(category)} style={{ cursor: 'pointer' }}>
+      <div>
+        {['Fiction', 'Juvenile Fiction', 'History', 'Science', 'Adventure', 'Political Science', 'Philosophy', 'Classics', 'Medical'].map(category => (
+          <button key={category} onClick={() => handleCategoryClick(category)} style={{ cursor: 'pointer' }}>
             {category}
-          </li>
+          </button>
         ))}
-      </ul>
+      </div>
       {selectedCategory && (
         <div>
           <h2>Books in {selectedCategory}</h2>
@@ -41,6 +54,13 @@ const Filter = () => {
               </li>
             ))}
           </ul>
+          <div>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+              <button key={page} onClick={() => handlePageChange(page)} disabled={page === currentPage}>
+                {page}
+              </button>
+            ))}
+          </div>
         </div>
       )}
     </div>

@@ -50,8 +50,35 @@ app.get('/books', async (req, res) => {
 
 const bookSchema = new mongoose.Schema({
   title: String,
+  authors: [String],
+  publisher: String,
+  publishedDate: String,
+  description: String,
+  industryIdentifiers: [{ type: { type: String }, identifier: String }],
+  pageCount: Number,
+  dimensions: {
+    height: String,
+    width: String,
+    thickness: String,
+  },
+  printType: String,
   mainCategory: String,
-  // include other properties as needed
+  categories: [String],
+  averageRating: Number,
+  ratingsCount: Number,
+  language: String,
+  imageLinks: {
+    smallThumbnail: String,
+    thumbnail: String,
+    small: String,
+    medium: String,
+    large: String,
+    extraLarge: String,
+  },
+  infoLink: String,
+  canonicalVolumeLink: String,
+  availableQuantity: { type: Number, default: 0 },
+  totalQuantity: { type: Number, default: 0 }
 });
 
 const Book = mongoose.model('Book', bookSchema);
@@ -88,14 +115,24 @@ app.get('/categories', async (req, res) => {
 
 
 app.get('/api/books', async (req, res) => {
-  const { category } = req.query;
+  const { category, page = 1, limit = 10 } = req.query; // Defaults to page 1 and limit 10 if not specified
   try {
-    const books = await Book.find({ mainCategory: category });  // Adjust field name as necessary
-    res.json(books);
+    const books = await Book.find({ mainCategory: category })
+      .skip((page - 1) * limit) // Skip the previous pages
+      .limit(parseInt(limit)); // Limit the number of results
+
+    const count = await Book.countDocuments({ mainCategory: category }); // For total count of books in category
+    res.json({
+      books,
+      totalPages: Math.ceil(count / limit),
+      currentPage: parseInt(page),
+      totalBooks: count
+    });
   } catch (error) {
     res.status(500).json({ message: 'Error fetching books: ' + error.message });
   }
 });
+
 
 
 app.listen(PORT, () => {
