@@ -1,17 +1,17 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const cors = require('cors');
-const userRoutes = require('./routes/userRoutes');
-const bookRoutes=require('./routes/bookRoutes');
-const searchRoutes=require('./routes/searchRoute')
-const bodyParser = require('body-parser');
-const borrowRoutes=require('./routes/borrowBooks');
+const express = require("express");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const cors = require("cors");
+const userRoutes = require("./routes/userRoutes");
+const bookRoutes = require("./routes/bookRoutes");
+const searchRoutes = require("./routes/searchRoute");
+const bodyParser = require("body-parser");
+const borrowRoutes = require("./routes/borrowBooks");
 const filterRoutes = require("./routes/filterRoutes");
-
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 
+const logRoutes=require("./routes/logs")
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -39,24 +39,29 @@ mongoose
   .catch((err) => console.log(err));
 
 // Routes
-app.use('/api/users', userRoutes);
-app.use('/api/books',bookRoutes);
-app.use('/api/borrow',borrowRoutes)
+app.use("/api/users", userRoutes);
+app.use("/api/books", bookRoutes);
+app.use("/api/borrow", borrowRoutes);
 app.use("/api/search", searchRoutes);
 app.use("/api/filter", filterRoutes);
-router.get('/verify-token', (req, res) => {
-  const token = req.headers['authorization'].split(' ')[1];
+
+app.use('/api/logs', logRoutes);
+
+// **********************************************************************
+router.get("/verify-token", (req, res) => {
+  const token = req.headers["authorization"].split(" ")[1];
   if (!token) {
-    return res.status(401).json({ message: 'Token is required' });
+    return res.status(401).json({ message: "Token is required" });
   }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
-      return res.status(401).json({ message: 'Invalid token' });
+      return res.status(401).json({ message: "Invalid token" });
     }
     res.json({ user: decoded });
   });
 });
+
 app.listen(PORT, () => {
   console.log(`Server is runnin...`);
 });

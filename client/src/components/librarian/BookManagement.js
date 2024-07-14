@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import BookList from './BookList';
 import BookForm from './Bookform';
 
@@ -6,17 +6,59 @@ const BookManagement = () => {
   const [books, setBooks] = useState([]);
   const [editingBook, setEditingBook] = useState(null);
 
-  const addBook = (book) => {
-    setBooks([...books, { ...book, id: Date.now() }]);
+  // Fetch books from the server
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const response = await fetch('/api/books');
+        const data = await response.json();
+        setBooks(data);
+      } catch (error) {
+        console.error('Error fetching books:', error);
+      }
+    };
+
+    fetchBooks();
+  }, []);
+
+  const addBook = async (book) => {
+    try {
+      const response = await fetch('/api/books', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(book),
+      });
+      const newBook = await response.json();
+      setBooks([...books, newBook]);
+    } catch (error) {
+      console.error('Error adding book:', error);
+    }
   };
 
-  const updateBook = (updatedBook) => {
-    setBooks(books.map((book) => (book.id === updatedBook.id ? updatedBook : book)));
-    setEditingBook(null);
+  const updateBook = async (updatedBook) => {
+    try {
+      const response = await fetch(`/api/books/${updatedBook.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedBook),
+      });
+      const result = await response.json();
+      setBooks(books.map((book) => (book.id === result.id ? result : book)));
+      setEditingBook(null);
+    } catch (error) {
+      console.error('Error updating book:', error);
+    }
   };
 
-  const deleteBook = (id) => {
-    setBooks(books.filter((book) => book.id !== id));
+  const deleteBook = async (id) => {
+    try {
+      await fetch(`/api/books/${id}`, {
+        method: 'DELETE',
+      });
+      setBooks(books.filter((book) => book.id !== id));
+    } catch (error) {
+      console.error('Error deleting book:', error);
+    }
   };
 
   return (

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Nav from '../naviagtion/Nav';
+import AdminNav from '../naviagtion/AdminNav';
 import Header from '../header/Header';
 import Dashboard from '../librarian/Dashboard';
 import BookManagement from '../librarian/BookManagement';
-// import Reports from './Reports';
+import AdminLogs from './AdminLogs';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ const AdminDashboard = () => {
 
   return (
     <div className="flex h-screen bg-gray-100">
-      <Nav activeTab={activeTab} setActiveTab={setActiveTab} />
+      <AdminNav activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className="flex-1 flex flex-col">
         <Header onLogout={handleLogout} />
         <main className="flex-1 p-6 overflow-auto">
@@ -43,8 +43,7 @@ const AdminDashboard = () => {
               deleteBook={deleteBook}
             />
           )}
-          {/* {activeTab === 'users' && <UserManagement />} */}
-          {/* {activeTab === 'reports' && <Reports />} */}
+          {activeTab === 'logs' && <AdminLogs />}
         </main>
       </div>
     </div>
