@@ -1,64 +1,61 @@
 import React, { useState, useEffect } from 'react';
 
 const BookForm = ({ onSubmit, initialData }) => {
-  const [book, setBook] = useState({ title: '', author: '', isbn: '' });
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
 
   useEffect(() => {
     if (initialData) {
-      setBook(initialData);
+      setTitle(initialData.title);
+      setAuthor(initialData.author);
     }
   }, [initialData]);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setBook({ ...book, [name]: value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(book);
-    setBook({ title: '', author: '', isbn: '' });
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!title || !author) return;
+    const book = { title, author };
+    if (initialData) {
+      onSubmit({ ...book, id: initialData.id });
+    } else {
+      onSubmit(book);
+    }
+    setTitle('');
+    setAuthor('');
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-6 rounded-lg shadow-md">
-      <div className="space-y-4">
-        <input
-          type="text"
-          name="title"
-          value={book.title}
-          onChange={handleChange}
-          placeholder="Book Title"
-          className="w-full p-2 border rounded"
-          required
-        />
-        <input
-          type="text"
-          name="author"
-          value={book.author}
-          onChange={handleChange}
-          placeholder="Author"
-          className="w-full p-2 border rounded"
-          required
-        />
-        <input
-          type="text"
-          name="isbn"
-          value={book.isbn}
-          onChange={handleChange}
-          placeholder="ISBN"
-          className="w-full p-2 border rounded"
-          required
-        />
-      </div>
-      <button
-        type="submit"
-        className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-      >
-        {initialData ? 'Update Book' : 'Add Book'}
-      </button>
-    </form>
-  );
+    <form onSubmit={handleSubmit} className="space-y-4">
+    <div>
+      <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
+      <input
+        type="text"
+        id="title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+        placeholder="Enter book title"
+      />
+    </div>
+    <div>
+      <label htmlFor="author" className="block text-sm font-medium text-gray-700">Author</label>
+      <input
+        type="text"
+        id="author"
+        value={author}
+        onChange={(e) => setAuthor(e.target.value)}
+        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+        placeholder="Enter book author"
+      />
+    </div>
+    <button
+      type="submit"
+      className="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md shadow-sm hover:bg-indigo-700"
+    >
+      {initialData ? 'Update Book' : 'Add Book'}
+    </button>
+  </form>
+);
 };
 
 export default BookForm;

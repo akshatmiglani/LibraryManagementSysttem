@@ -8,8 +8,12 @@ const searchRoutes = require("./routes/searchRoute");
 const bodyParser = require("body-parser");
 const borrowRoutes = require("./routes/borrowBooks");
 const filterRoutes = require("./routes/filterRoutes");
+
+const logRoutes=require("./routes/logs")
+
 const jwt = require("jsonwebtoken");
 const router = express.Router();
+
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -43,6 +47,7 @@ app.use("/api/books", bookRoutes);
 app.use("/api/borrow", borrowRoutes);
 app.use("/api/search", searchRoutes);
 app.use("/api/filter", filterRoutes);
+app.use('/api/logs', logRoutes);
 
 // **********************************************************************
 router.get("/verify-token", (req, res) => {

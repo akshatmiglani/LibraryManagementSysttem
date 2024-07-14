@@ -26,6 +26,52 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.post('/', verifyToken, async (req, res) => {
+  const { title, author } = req.body;
+  try {
+    const newBook = new Books({ title, author });
+    await newBook.save();
+    res.status(201).json(newBook);
+  } catch (error) {
+    console.error('Error adding book:', error.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Update a book
+router.put('/:id', verifyToken, async (req, res) => {
+  const { id } = req.params;
+  const { title, author } = req.body;
+  try {
+    const updatedBook = await Books.findByIdAndUpdate(
+      id,
+      { title, author },
+      { new: true }
+    );
+    if (!updatedBook) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+    res.json(updatedBook);
+  } catch (error) {
+    console.error('Error updating book:', error.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Delete a book
+router.delete('/:id', verifyToken, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedBook = await Books.findByIdAndDelete(id);
+    if (!deletedBook) {
+      return res.status(404).json({ error: 'Book not found' });
+    }
+    res.json({ message: 'Book deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting book:', error.message);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 router.get('/book/:id',async(req,res)=>{
     const bookId = req.params.id;
     try{
@@ -37,6 +83,7 @@ router.get('/book/:id',async(req,res)=>{
         res.status(500).json({ error: 'Internal server error' });
       }
 })
+
 
 router.post('/request', verifyToken, (req, res) => {
   const { title, author } = req.body;
