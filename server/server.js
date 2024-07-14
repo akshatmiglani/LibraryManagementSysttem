@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
 const searchRoutes = require("./routes/searchRoute");
+const filterRoutes = require("./routes/filterRoutes");
 const bodyParser = require("body-parser");
 
 const app = express();
@@ -36,6 +37,7 @@ mongoose
 // Routes
 app.use("/api/users", userRoutes);
 app.use("/api/search", searchRoutes);
+app.use("/api/filter", filterRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is runnin...`);
