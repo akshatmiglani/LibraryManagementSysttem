@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
+const bookRoutes=require('./routes/bookRoutes')
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -29,6 +30,7 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
 
 // Routes
 app.use('/api/users', userRoutes);
+app.use('/api/books',bookRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is runnin...`);
