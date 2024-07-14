@@ -6,6 +6,7 @@ import HomeHeader from '../header/Homeheader';
 
 const BookList = () => {
   const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [booksPerPage] = useState(24);
   const [loading, setLoading] = useState(true);
@@ -16,7 +17,7 @@ const BookList = () => {
         setLoading(true);
         const response = await axios.get('http://localhost:4000/api/books');
         setBooks(response.data);
-      } catch (error) {
+     } catch (error) {
         console.error('Error fetching books:', error.message);
       } finally {
         setLoading(false);
