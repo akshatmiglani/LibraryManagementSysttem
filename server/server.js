@@ -1,4 +1,3 @@
-// server.js
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
@@ -6,7 +5,9 @@ const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
 const searchRoutes = require("./routes/searchRoute");
 const filterRoutes = require("./routes/filterRoutes");
+const bookRoutes=require('./routes/bookRoutes')
 const bodyParser = require("body-parser");
+
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -35,7 +36,8 @@ mongoose
   .catch((err) => console.log(err));
 
 // Routes
-app.use("/api/users", userRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/books',bookRoutes);
 app.use("/api/search", searchRoutes);
 app.use("/api/filter", filterRoutes);
 

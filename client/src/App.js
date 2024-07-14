@@ -8,6 +8,8 @@ import LibrarianDashboard from "./components/librarian/LibrarianDashboard";
 import LoginPage from "./components/login/LoginPage";
 import SignupPage from "./components/signup/SignupPage";
 import UserDashboard from "./components/user/UserDashboard";
+import BookList from './components/home/BookList';
+
 
 const App = () => {
   return (
@@ -31,6 +33,8 @@ const App = () => {
           element={<PrivateRoute element={UserDashboard} roles={["user"]} />}
         />
         <Route exact path="/books/:category" element={<GenreResults />} />
+
+        <Route path="/books" element={<BookList />} />
       </Routes>
     </Router>
   );
