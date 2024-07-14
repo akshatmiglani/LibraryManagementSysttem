@@ -1,8 +1,8 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const verifyToken = require('../middleware/verifyToken')
+const verifyToken = require("../middleware/verifyToken");
 
-const Books = require('../models/Books');
+const Books = require("../models/Books");
 
 router.get('/latestbooks',async(req,res)=>{
     try {
@@ -43,12 +43,14 @@ router.post('/request', verifyToken, (req, res) => {
   const userId = req.user.id; // Assuming the token includes `id`
 
   // Simulating a database call to create a book entry with the user's ID
-  console.log(`Book titled ${title} by ${author} requested by user ID ${userId}`);
+  console.log(
+    `Book titled ${title} by ${author} requested by user ID ${userId}`
+  );
 
   // Normally you would create a database entry here
   res.status(201).json({
-    message: 'Book request submitted successfully',
-    data: { title, author, requestedBy: userId }
+    message: "Book request submitted successfully",
+    data: { title, author, requestedBy: userId },
   });
 });
 
