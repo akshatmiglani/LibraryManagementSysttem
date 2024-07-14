@@ -7,6 +7,7 @@ import LibrarianDashboard from './components/librarian/LibrarianDashboard';
 import UserDashboard from './components/user/UserDashboard';
 import PrivateRoute from './components/PrivateRoute'; 
 import HomePage from './components/home/HomePage';
+import BookList from './components/home/BookList';
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
           path="/user"
           element={<PrivateRoute element={UserDashboard} roles={['user']} />}
         />
+        <Route path="/books" element={<BookList />} />
       </Routes>
     </Router>
   );
