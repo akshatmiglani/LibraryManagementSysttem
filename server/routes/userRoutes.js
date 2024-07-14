@@ -4,13 +4,24 @@ const User = require('../models/User');
 
 const router = express.Router();
 
-// Signup route
 router.post('/signup', async (req, res) => {
   const { username, email, password, role } = req.body;
   try {
     // Check for missing fields
     if (!username || !email || !password || !role) {
       return res.status(400).json({ error: 'All fields are required' });
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: 'Invalid email format' });
+    }
+
+    // Validate role
+    const validRoles = ['admin', 'librarian', 'user'];
+    if (!validRoles.includes(role)) {
+      return res.status(400).json({ error: 'Invalid role' });
     }
 
     // Check if the user already exists
@@ -25,12 +36,12 @@ router.post('/signup', async (req, res) => {
 
     res.status(201).json({ message: 'User created successfully' });
   } catch (error) {
-    console.error('Error during signup:', error); // Detailed error logging
+    console.error('Error during signup:', error);
     res.status(500).json({ error: 'Error creating user', details: error.message });
   }
 });
 
-// Login route
+// Modified login route
 router.post('/login', async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -46,15 +57,15 @@ router.post('/login', async (req, res) => {
 
     const token = jwt.sign({ id: user._id, role: user.role }, 'secret', { expiresIn: '1h' });
 
-    res.json({ token });
+    res.json({ token, role: user.role });
   } catch (error) {
     console.error('Error during login:', error); 
     res.status(500).json({ error: 'Server error', details: error.message });
   }
 });
 
-// Middleware to verify token and role
-const verifyTokenAndRole = (roles) => (req, res, next) => {
+// Middleware to verify token (role check removed)
+const verifyToken = (req, res, next) => {
   const token = req.headers['authorization']?.split(' ')[1];
   if (!token) {
     return res.status(401).json({ error: 'Unauthorized: Token not provided' });
@@ -62,12 +73,8 @@ const verifyTokenAndRole = (roles) => (req, res, next) => {
 
   jwt.verify(token, 'secret', (err, decoded) => {
     if (err) {
-      console.error('Error during token verification:', err); // Detailed error logging
+      console.error('Error during token verification:', err);
       return res.status(401).json({ error: 'Unauthorized: Invalid token' });
-    }
-
-    if (!roles.includes(decoded.role)) {
-      return res.status(403).json({ error: 'Access denied: Invalid role' });
     }
 
     req.user = decoded;
@@ -75,20 +82,26 @@ const verifyTokenAndRole = (roles) => (req, res, next) => {
   });
 };
 
-// Admin panel route
-router.get('/admin', verifyTokenAndRole(['admin']), async (req, res) => {
+// Protected routes
+router.get('/admin', verifyToken, async (req, res) => {
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ error: 'Access denied: Invalid role' });
+  }
   res.json({ message: 'Welcome to the admin panel' });
 });
 
-// Examiner panel route
-router.get('/librarian', verifyTokenAndRole(['librarian']), async (req, res) => {
+router.get('/librarian', verifyToken, async (req, res) => {
+  if (req.user.role !== 'librarian') {
+    return res.status(403).json({ error: 'Access denied: Invalid role' });
+  }
   res.json({ message: 'Welcome to the librarian panel' });
 });
 
-// Invigilator panel route
-router.get('/user', verifyTokenAndRole(['user']), async (req, res) => {
+router.get('/user', verifyToken, async (req, res) => {
+  if (req.user.role !== 'user') {
+    return res.status(403).json({ error: 'Access denied: Invalid role' });
+  }
   res.json({ message: 'Welcome to the user panel' });
 });
-
 
 module.exports = router;
