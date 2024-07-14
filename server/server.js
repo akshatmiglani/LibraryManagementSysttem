@@ -7,6 +7,7 @@ const bookRoutes=require('./routes/bookRoutes');
 const searchRoutes=require('./routes/searchRoute')
 const bodyParser = require('body-parser');
 const filterRoutes = require("./routes/filterRoutes");
+const logRoutes=require("./routes/logs")
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -39,6 +40,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/books',bookRoutes);
 app.use("/api/search", searchRoutes);
 app.use("/api/filter", filterRoutes);
+app.use('/api/logs', logRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is runnin...`);

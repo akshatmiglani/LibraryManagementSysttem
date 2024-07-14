@@ -1,6 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const Log = require('../models/Log');
 
 const router = express.Router();
 
@@ -34,6 +35,9 @@ router.post('/signup', async (req, res) => {
     const user = new User({ username, email, password, role });
     await user.save();
 
+    const newLog = new Log({ user: user._id, action: 'sign-in' });
+    await newLog.save();
+
     res.status(201).json({ message: 'User created successfully' });
   } catch (error) {
     console.error('Error during signup:', error);
@@ -49,6 +53,9 @@ router.post('/login', async (req, res) => {
     if (!user) {
       return res.status(401).json({ error: 'Invalid username or password' });
     }
+
+    const newLog = new Log({ user: user._id, action: 'sign-in' });
+    await newLog.save();
 
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
