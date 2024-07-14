@@ -1,13 +1,14 @@
-// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
-const bookRoutes=require('./routes/bookRoutes')
+const bookRoutes=require('./routes/bookRoutes');
+const searchRoutes=require('./routes/searchRoute')
 const bodyParser = require('body-parser');
 const borrowRoutes=require('./routes/borrowBooks');
-const searchRoutes=require('./routes/searchRoute');
+const filterRoutes = require("./routes/filterRoutes");
+
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -39,6 +40,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/books',bookRoutes);
 app.use('/api/borrow',borrowRoutes)
 app.use("/api/search", searchRoutes);
+app.use("/api/filter", filterRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is runnin...`);
