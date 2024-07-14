@@ -3,11 +3,12 @@ import { Link } from "react-router-dom";
 import "../../App.css";
 import Filter from "../Filtergenre/Filter";
 import SearchBar from "../SearchBar";
+import HomeHeader from "../header/Homeheader";
 
 const HomePage = () => {
   return (
     <div className="min-h-screen bg-gray-100 grany">
-      <nav className="bg-gray-800 shadow p-4 flex justify-between">
+      {/* <nav className="bg-gray-800 shadow p-4 flex justify-between">
         <div className="flex items-center space-x-4">
           <img src="book-library.ico" alt="Library Logo" className="h-10" />
           <h1 className="text-xl font-bold text-white">Book Space</h1>
@@ -26,7 +27,8 @@ const HomePage = () => {
             Sign Up
           </Link>
         </div>
-      </nav>
+      </nav> */}
+      <HomeHeader />
 
       <div className="text-center py-12">
         <h2 className="text-3xl font-semibold mb-4">
