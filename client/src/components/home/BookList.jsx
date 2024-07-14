@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import BookCard from '../Filtergenre/BookCard';
-import Pagination from '../Filtergenre/Pagination';
-import HomeHeader from '../header/Homeheader';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import BookCard from "../Filtergenre/BookCard";
+import Pagination from "../Filtergenre/Pagination";
+import HomeHeader from "../header/Homeheader";
 
 const BookList = () => {
   const [books, setBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [booksPerPage] = useState(24);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBooks = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:4000/api/books');
+        const response = await axios.get("http://localhost:4000/api/books");
         setBooks(response.data);
       } catch (error) {
-        console.error('Error fetching books:', error.message);
+        console.error("Error fetching books:", error.message);
       } finally {
         setLoading(false);
       }
@@ -39,14 +39,20 @@ const BookList = () => {
 
   return (
     <div className="">
-      <HomeHeader />  {/* Use the Header component */}
-      <h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">Book Collection</h1>
+      <HomeHeader /> {/* Use the Header component */}
+      <h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+        Book Collection
+      </h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {currentBooks.map((book) => (
           <BookCard key={book._id} book={book} />
         ))}
       </div>
-      <Pagination currentPage={currentPage} totalPages={totalPages} paginate={paginate} />
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        paginate={paginate}
+      />
     </div>
   );
 };

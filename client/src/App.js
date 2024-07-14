@@ -9,6 +9,7 @@ import LoginPage from "./components/login/LoginPage";
 import SignupPage from "./components/signup/SignupPage";
 import UserDashboard from "./components/user/UserDashboard";
 import BookList from './components/home/BookList';
+import BookDetails from './components/home/BookDetails';
 
 
 const App = () => {
@@ -32,9 +33,10 @@ const App = () => {
           path="/user"
           element={<PrivateRoute element={UserDashboard} roles={["user"]} />}
         />
+        <Route path="/books/book/:id" element={<BookDetails />} />
         <Route exact path="/books/:category" element={<GenreResults />} />
-
         <Route path="/books" element={<BookList />} />
+
       </Routes>
     </Router>
   );
