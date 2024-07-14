@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../../App.css";
+import Filter from "../Filtergenre/Filter";
 import SearchBar from "../SearchBar";
 
 const HomePage = () => {
@@ -58,14 +59,9 @@ const HomePage = () => {
             </ul>
           </div>
           <div className="w-1/5 p-4 bg-white rounded-lg shadow-md">
-            <h3 className="text-2xl font-semibold mb-4">Trending</h3>
+            <h3 className="text-2xl font-semibold mb-4">Search By Genres</h3>
             {/* Trending List */}
-            <ul className="list-disc list-inside">
-              <li>Book A</li>
-              <li>Book B</li>
-              <li>Book C</li>
-              {/* Add more book items here */}
-            </ul>
+            <Filter />
           </div>
         </div>
       </div>
