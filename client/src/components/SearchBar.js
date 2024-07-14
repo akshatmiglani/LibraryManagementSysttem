@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const SearchBar = () => {
   const [title, setTitle] = useState("");
@@ -24,14 +25,12 @@ const SearchBar = () => {
             params: { title: searchValue },
           }
         );
-        setBooks(response.data || []); // Ensure default to empty array if no items
-        setShowResults(true); // Show results section
-
-        // Check if no books found
+        setBooks(response.data || []); 
+        setShowResults(true); 
         if (response.data.length === 0) {
           setError("Book not found");
         } else {
-          setError(""); // Clear error if books are found
+          setError(""); 
         }
       } catch (error) {
         console.error("Failed to fetch books", error.response || error);
@@ -63,14 +62,12 @@ const SearchBar = () => {
               {books.length > 0 ? (
                 books.map((book) => (
                   <li key={book._id} className="px-4 py-2">
-                    <a
-                      href={book.infoLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <Link
+                      to={`/books/book/${book._id}`} // Link to BookDetails component with book ID
                       className="text-indigo-600 font-medium hover:text-indigo-500"
                     >
                       {book.title} by {book.authors.join(", ")}
-                    </a>
+                    </Link>
                     <p className="text-gray-500 text-sm">
                       Published by {book.publisher}
                     </p>

@@ -1,11 +1,32 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../../App.css";
 import Filter from "../Filtergenre/Filter";
 import SearchBar from "../SearchBar";
 import HomeHeader from "../header/Homeheader";
+import axios from 'axios';
+import BookCard from "../Filtergenre/BookCard";
 
 const HomePage = () => {
+  const [latestBooks, setLatestBooks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchLatestBooks = async () => {
+      try {
+        const response = await axios.get("http://localhost:4000/api/books/latestbooks"); // Adjust API endpoint as needed
+        setLatestBooks(response.data);
+        setLoading(false);
+      } catch (error) {
+        setError("Error fetching latest books");
+        setLoading(false);
+      }
+    };
+
+    fetchLatestBooks();
+  }, []);
+  
   return (
     <div className="min-h-screen bg-gray-100 grany">
       {/* <nav className="bg-gray-800 shadow p-4 flex justify-between">
@@ -52,17 +73,20 @@ const HomePage = () => {
         <div className="flex justify-center gap-4">
           <div className="w-1/2 p-4 bg-white rounded-lg shadow-md">
             <h3 className="text-2xl font-semibold mb-4">New Arrivals</h3>
-            {/* New Arrivals List */}
-            <ul className="list-disc list-inside">
-              <li>Book 1</li>
-              <li>Book 2</li>
-              <li>Book 3</li>
-              {/* Add more book items here */}
-            </ul>
+            {loading ? (
+              <div>Loading...</div>
+            ) : error ? (
+              <div>{error}</div>
+            ) : (
+              <div className="space-y-4">
+                {latestBooks.map((book) => (
+                  <BookCard key={book._id} book={book} />
+                ))}
+              </div>
+            )}
           </div>
           <div className="w-1/5 p-4 bg-white rounded-lg shadow-md">
             <h3 className="text-2xl font-semibold mb-4">Search By Genres</h3>
-            {/* Trending List */}
             <Filter />
           </div>
         </div>
