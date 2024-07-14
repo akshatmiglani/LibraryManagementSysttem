@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
-const bookRoutes=require('./routes/bookRoutes')
+const bookRoutes=require('./routes/bookRoutes');
+const searchRoutes=require('./routes/searchRoute')
 const bodyParser = require('body-parser');
 
 const app = express();
