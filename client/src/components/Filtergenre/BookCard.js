@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Link } from "react-router-dom";
 
 const BookCard = ({ book }) => (
   <div className="flex bg-white rounded shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md p-2 h-28">
@@ -25,10 +25,12 @@ const BookCard = ({ book }) => (
         </h3>
       </Link>
       <p className="mt-1 text-xs text-gray-600 truncate">
-        {book.authors ? book.authors.join(', ') : 'Unknown Author'}
+        {book.authors ? book.authors.join(", ") : "Unknown Author"}
       </p>
       <p className="mt-1 text-xs text-gray-500">
-        {book.publishedDate ? new Date(book.publishedDate).getFullYear() : 'Unknown Year'}
+        {book.publishedDate
+          ? new Date(book.publishedDate).getFullYear()
+          : "Unknown Year"}
       </p>
     </div>
   </div>
