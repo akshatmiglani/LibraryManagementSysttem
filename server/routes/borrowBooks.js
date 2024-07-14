@@ -4,6 +4,7 @@ const Borrowing = require('../models/Borrowing');
 const Book = require('../models/Books');
 const User = require('../models/User');
 const nodemailer = require('nodemailer');
+const verifyToken = require('../middleware/verifyToken');
 
 router.post('/borrow', async (req, res) => {
     const { bookId, dueDate } = req.body;
@@ -53,4 +54,15 @@ router.post('/borrow', async (req, res) => {
     }
 });
 
+
+router.get('/api/user/borrowed-books', verifyToken, async (req, res) => {
+    try {
+      const borrowings = await Borrowing.find({ user: req.user.userId }).populate('book').exec();
+      res.json(borrowings);
+    } catch (error) {
+      console.error('Error fetching borrowed books:', error);
+      res.status(500).json({ error: 'Failed to fetch borrowed books' });
+    }
+  });
+  
 module.exports = router;
