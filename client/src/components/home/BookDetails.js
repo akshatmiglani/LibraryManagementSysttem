@@ -1,29 +1,29 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import BookList from "./BookList";
+
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import BookList from './BookList';
+import HomeHeader from '../header/Homeheader';
 
 const BookDetails = () => {
-  const { id } = useParams();
-  const [book, setBook] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate();
+  const { id } = useParams(); // Retrieve the book ID from the URL
+  const [book, setBook] = useState(null); // State to hold the book data
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
 
   useEffect(() => {
     const fetchBook = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:4000/api/books/${id}`
-        );
-        setBook(response.data);
+        // Fetch book details from the API using Axios
+        const response = await axios.get(`http://localhost:4000/api/books/book/${id}`);
+        setBook(response.data); // Set the book state with the fetched data
       } catch (error) {
-        setError("Error fetching book details");
+        setError('Error fetching book details'); // Set error state if fetching fails
       } finally {
-        setLoading(false);
+        setLoading(false); // Set loading state to false after fetching
       }
     };
+
 
     fetchBook();
 
@@ -45,6 +45,7 @@ const BookDetails = () => {
     }
   }, [id]);
 
+  // Placeholder function for handling add to cart functionality
   const handleAddToCart = () => {
     if (!user) {
       alert("You need to be logged in to borrow books");
@@ -60,10 +61,15 @@ const BookDetails = () => {
     navigate("/cart");
   };
 
+  // Render loading state if still loading
   if (loading) return <div>Loading...</div>;
+  
+  // Render error message if there's an error fetching data
   if (error) return <div>{error}</div>;
 
-  return (
+  // Render book details once loaded
+  return (<>
+    <HomeHeader />
     <div className="container mx-auto p-6 bg-gray-100 rounded-lg shadow-lg mt-6">
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="flex-shrink-0 w-full lg:w-1/3">
@@ -117,11 +123,8 @@ const BookDetails = () => {
           </a>
         </div>
       </div>
-      <div className="mt-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Other Books</h2>
-        <BookList />
-      </div>
     </div>
+    </>
   );
 };
 

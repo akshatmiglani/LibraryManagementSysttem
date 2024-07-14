@@ -14,7 +14,7 @@ const HomeHeader = () => {
     <nav className="bg-gray-800 shadow p-4 flex justify-between mb-6">
       <div className="flex items-center space-x-4">
         <Link to="/" className="flex items-center space-x-2">
-          <img src="book-library.ico" alt="Library Logo" className="h-10" />
+          <img src="/book-library.ico" alt="Library Logo" className="h-10" />
           <h1 className="text-xl font-bold text-white">Book Space</h1>
         </Link>
       </div>
