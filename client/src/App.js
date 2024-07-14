@@ -33,10 +33,10 @@ const App = () => {
           path="/user"
           element={<PrivateRoute element={UserDashboard} roles={["user"]} />}
         />
+        <Route path="/books/book/:id" element={<BookDetails />} />
         <Route exact path="/books/:category" element={<GenreResults />} />
-
         <Route path="/books" element={<BookList />} />
-        <Route path="/books/:id" element={<BookDetails />} />
+
       </Routes>
     </Router>
   );

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Borrowing = require('../models/Borrowing');
-const Book = require('../models/Book');
+const Book = require('../models/Books');
 const User = require('../models/User');
 const nodemailer = require('nodemailer');
 

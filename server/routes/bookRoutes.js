@@ -4,6 +4,18 @@ const verifyToken = require('../middleware/verifyToken')
 
 const Books = require('../models/Books');
 
+router.get('/latestbooks',async(req,res)=>{
+    try {
+        const latestBooks = await Books.find().sort({ publishedDate: -1 }).limit(15); 
+        res.json(latestBooks);
+      } catch (error) {
+        console.error('Error fetching latest books:', error.message);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+
+})
+
+
 router.get('/', async (req, res) => {
     try {
       const books = await Books.find({});
@@ -14,10 +26,10 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/:id',async(req,res)=>{
+router.get('/book/:id',async(req,res)=>{
     const bookId = req.params.id;
     try{
-        const books=await Book.findById(bookId);
+        const books=await Books.findById(bookId);
         res.json(books);
     }
     catch (error) {
@@ -25,6 +37,7 @@ router.get('/:id',async(req,res)=>{
         res.status(500).json({ error: 'Internal server error' });
       }
 })
+
 router.post('/request', verifyToken, (req, res) => {
   const { title, author } = req.body;
   const userId = req.user.id; // Assuming the token includes `id`
