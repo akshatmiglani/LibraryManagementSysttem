@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const verifyToken = require('../middleware/verifyToken')
-const Book = require('../models/Book');
+
+const Books = require('../models/Books');
 
 router.get('/', async (req, res) => {
     try {
-      const books = await Book.find({});
+      const books = await Books.find({});
       res.json(books);
     } catch (error) {
       console.error('Error fetching books:', error.message);
